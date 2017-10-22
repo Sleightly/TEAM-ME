@@ -9,23 +9,32 @@ att.auth = {
   data: {
     'grant_type': 'client_credentials'
   },
+  error: function(err){
+    console.log(err);
+  },
   async: false
 }
 
 att.traffic = {
   method: 'GET',
-  url: 'https://ic-event-service.run.aws-usw02-pr.ice.predix.io/v2/locations/events',
+  url: 'https://ic-event-service.run.aws-usw02-pr.ice.predix.io/v2/locations/',
   headers: {
     'Predix-Zone-Id': 'SDSIM-IE-TRAFFIC'
+  },
+  error: function(err){
+    console.log(err);
   },
   async: false
 }
 
 att.location = {
   method: 'GET',
-  url: 'https://ic-metadata-service.run.aws-usw02-pr.ice.predix.io/v2/metadata/locations/',
+  url: 'https://ic-metadata-service.run.aws-usw02-pr.ice.predix.io/v2/metadata/locations/search',
   headers: {
     'Predix-Zone-Id': 'SDSIM-IE-TRAFFIC'
+  },
+  error: function(err){
+    console.log(err);
   },
   async: false
 }
@@ -39,17 +48,61 @@ att.getData = function(bbox, start, end){
     att.location.headers.Authorization = data.token_type+' '+data.access_token;
   }
   $.ajax(att.auth)
+
+  //locations
+  var locparams = {
+    q: 'locationType:TRAFFIC_LANE',
+    bbox: bbox,
+    size: 400,
+    startTime: start,
+    endTime: end
+  }
+  att.location.data = locparams;
+  var locations = [];
+  att.location.success = function(data){
+    locations = data.content;
+    locations.forEach((location)=>{
+      var str = location.coordinates;
+      var spl = str.split(',');
+      var one = spl[0].split(':');
+      var two = spl[1].split(':');
+      att.cachedLocations[location.locationUid] = {
+        lat: (parseFloat(one[0])+parseFloat(one[0]))/2,
+        lng: (parseFloat(one[1])+parseFloat(two[1]))/2
+      };
+    })
+  }
+  $.ajax(att.location);
+
   //traffic
   var params = {
-    bbox: bbox,
     eventType: 'TFEVT',
-    locationType: 'TRAFFIC_LANE',
     startTime: start,
     endTime: end
   };
   att.traffic.data=params;
   var trafficEvents = [];
+  locations.forEach((location)=>{
+    var temp = att.traffic.url;
+    att.traffic.url+=location.locationUid+'/events';
+    att.traffic.success = function(events){
+      console.log(events.content.length)
+      events.content.forEach((event)=>{
+        trafficEvents.push({
+          location: event.locationUid,
+          coords: att.cachedLocations[event.locationUid],
+          time: event.timestamp,
+          measures: event.measures
+        });
+      })
+      console.log(trafficEvents.length)
+    }
+    $.ajax(att.traffic);
+    att.traffic.url = temp;
+  })
+  /*
   att.traffic.success = function(events){
+    console.log(events)
     events.content.forEach(function(event){
       if(!att.cachedLocations[event.locationUid]){
         var temp = att.location.url;
@@ -81,12 +134,12 @@ att.getData = function(bbox, start, end){
       })
     })
   }
-  $.ajax(att.traffic)
+  $.ajax(att.traffic)*/
   trafficEvents.sort(function(a,b){
-    return b.time-a.time
+    return a.time-b.time
   });
   return trafficEvents;
-} 
+}
 
 function paramsToString(params){
   var ret = '?';
