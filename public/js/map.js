@@ -117,10 +117,13 @@ var makeMarker = function(locationUiD, coords, type, speed, vol) {
 
 	newVol = Math.floor(vol/3*5);
 	
-	bar1.scaledSize = new google.maps.Size(10, 0);
-	bar2.scaledSize = new google.maps.Size(10, 0);
-	bar3.scaledSize = new google.maps.Size(10, 0);
-	bar4.scaledSize = new google.maps.Size(10, 0);
+	bar1.scaledSize = new google.maps.Size(10, 1);
+	bar2.scaledSize = new google.maps.Size(10, 1);
+	bar3.scaledSize = new google.maps.Size(10, 1);
+	bar4.scaledSize = new google.maps.Size(10, 1);
+	if (newVol == 0) {
+		newVol = 2;
+	}
 	switch (lane) {
 		case 1:
 			bar1.scaledSize = new google.maps.Size(10, newVol);
@@ -328,6 +331,9 @@ var updateMarker = function(locationUiD, speed, vol) {
 		bar.url = '/images/speed'+(15-newSpeed)+'.svg';
 
 		newVol = Math.floor(vol/3*5);
+		if (newVol == 0) {
+			newVol = 2;
+		}
 		
 		bar.scaledSize = new google.maps.Size(10, newVol);
 
@@ -342,16 +348,16 @@ var updateMarker = function(locationUiD, speed, vol) {
 		storage[locationID]["vol"+lane] = vol;
 
 		var tVol = (storage[locationID].vol1 + storage[locationID].vol2+ 
-		storage[locationID].vol3 + storage[locationID].vol4)/4;
+		storage[locationID].vol3 + storage[locationID].vol4);
 
-		var tSpeed = (storage[locationID].speed1 + storage[locationID].speed2+ 
-		storage[locationID].speed3 + storage[locationID].speed4)/4;
+		var tSpeed = Math.floor((storage[locationID].speed1 + storage[locationID].speed2+ 
+		storage[locationID].speed3 + storage[locationID].speed4)/4*10)/10;
 
 		var idMarker = new google.maps.Marker({
 			position:coords,
 			icon: idIcon,
 			map: map,
-			content: '<h1>Total number of cars: '+tVol+'<br>Current speed: '+tSpeed+'</h1>',
+			content: '<h1>Total number of cars: '+tVol+'<br>Avg speed: '+tSpeed+' m/s</h1>',
 			zIndex: 10
 		});
 
