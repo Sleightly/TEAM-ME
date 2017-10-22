@@ -28,3 +28,55 @@ body {
   border: none;
   margin: none;
 }
+
+#sim {
+  position: absolute;
+  background-color: rgba(0,0,0,.5);
+  box-shadow: 3px 10px 22px 0px rgba(0,0,0,0.75);
+  width: 75%;
+  height: 10%;
+  top: 2%;
+  left: 12.5%;
+}
+
+.menu {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+.demoButton {
+  position: absolute;
+  top: 10%;
+  height: 80%;
+  width: 13%;
+  background-color: rgba(100,100,100,.5);
+  color: #cccccc;
+  border: #000000 1px solid !important;
+  margin: 0px;
+  padding: 0px;
+}
+
+.demoButton:hover{
+  background-color: rgba(120,120,120,.5);
+}
+
+.timeField {
+  width: 17%;
+}
+
+#control {
+  display: none;
+}
+
+.timeDisplay {
+  position: absolute;
+  width: 23%;
+  text-align: right;
+  right: 2%;
+  top: -10%;
+  height: 90%;
+  color: #cccccc;
+  font-family: 'Orbitron', sans-serif;
+}

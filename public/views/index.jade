@@ -6,8 +6,36 @@ html
     meta(name='author', content='meme')
     title TEAM MEME
     link(href='css/style.css', rel='stylesheet')
+    link(href="https://fonts.googleapis.com/css?family=Orbitron", rel="stylesheet")
   body
     #map
+    #sim
+        #menu.menu
+            button#demo1Button.demoButton(style="left:2%", onclick="demo1()")
+                |DEMO 1
+            button#demo1Button.demoButton(style="left:17%", onclick="demo1()")
+                |DEMO 2
+            button#demo1Button.demoButton(style="left:32%", onclick="demo1()")
+                |DEMO 3
+            button#customDemoButton.demoButton(style="left:47%", onclick="")
+                |CUSTOM
+            input#startTime.demoButton.timeField(style="left:62%")
+            input#duration.demoButton.timeField(style="left:81%")
+        #control.menu
+            button#startButton.demoButton(style="left:2%", onclick="activeSim.start()")
+                |START
+            button#endButton.demoButton(style="left:17%", onclick="activeSim.reset()")
+                |END
+            button#demo1Button.demoButton(style="left:32%;width:7%")
+                |+
+            button#customDemoButton.demoButton(style="left:41%;width:7%")
+                |-
+            #hour.timeDisplay(style="right:21%")
+                |00
+            #colon.timeDisplay(style="right:18%;width:5%")
+                |:
+            #min.timeDisplay
+                |00
     != gen.keys()
     != gen.js()
     script(src="https://maps.googleapis.com/maps/api/js?key="+gen.mapkey()+"&callback=initMap", async, defer)
