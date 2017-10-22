@@ -78,7 +78,7 @@ att.getData = function(bbox, start, end){
   var trafficEvents = [];
 
   //locations
-  /*var locparams = {
+  var locparams = {
     q: 'locationType:TRAFFIC_LANE',
     bbox: bbox,
     size: 400,
@@ -127,7 +127,7 @@ att.getData = function(bbox, start, end){
     }
     $.ajax(att.traffic);
     att.traffic.url = temp;
-  })*/
+  })
 
   //pedlocation
   var pedlocparams = {

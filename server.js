@@ -13,12 +13,16 @@ EXS.app.post('/sms', (req, res) => {
   	twiml.message('Sorry, no simmulation running currently!');
   	res.writeHead(200, {'Content-Type': 'text/xml'});
   	res.end(twiml.toString());
+  	return;
   }
   var str = req.body.Body;
   var keyword1 = "traffic";
   var keyword2 = "pedestrian";
 
   var msg = str.split(" ");
+  for (var i = 0; i < msg.length; i++) {
+  	msg[i] = msg[i].toLowerCase();
+  }
   console.log(msg)
   if (msg.indexOf(keyword1) != -1) {
     var msg = simulationTexts[Math.floor(simulationTexts.length/2*Math.random())];
