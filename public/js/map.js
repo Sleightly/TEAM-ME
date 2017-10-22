@@ -7,10 +7,10 @@ function initMap() {
 	}
 	map = new google.maps.Map(document.getElementById('map'), options);
 
-	google.maps.event.addListener(map, 'click',
+	/*google.maps.event.addListener(map, 'click',
 		function(event){
 			addMarker({latLng:event.latLng});
-		});
+		});*/
 
 
 /*	var markers = [
@@ -55,18 +55,18 @@ var makeMarker = function(locationUiD, coords, type, speed, vol) {
 			id.anchor = new google.maps.Point(17,26);
 		
 			bar1.origin = new google.maps.Point(0,0);
-			bar1.anchor = new google.maps.Point(15,vol*2);
+			bar1.anchor = new google.maps.Point(21,0);
 			
 			bar2.origin = new google.maps.Point(0,0);
-			bar2.anchor = new google.maps.Point(5,vol*2);
+			bar2.anchor = new google.maps.Point(11,0);
 		
 		
 			bar3.origin = new google.maps.Point(0,0);
-			bar3.anchor = new google.maps.Point(-5,vol*2);
+			bar3.anchor = new google.maps.Point(1,0);
 		
 		
 			bar4.origin = new google.maps.Point(0,0);
-			bar4.anchor = new google.maps.Point(-15,vol*2);
+			bar4.anchor = new google.maps.Point(-9,0);
 			break;
 			
 		case "human":
@@ -75,7 +75,7 @@ var makeMarker = function(locationUiD, coords, type, speed, vol) {
 			id.origin = new google.maps.Point(0,0);
 			id.anchor = new google.maps.Point(15,20);
 			bar.origin = new google.maps.Point(0,0);
-			bar.anchor = new google.maps.Point(5,vol*2);
+			bar.anchor = new google.maps.Point(6,0);
 			break;
 	}
 
@@ -86,48 +86,65 @@ var makeMarker = function(locationUiD, coords, type, speed, vol) {
 	bar2.url = '/images/speed'+(15-newSpeed)+'.svg';
 	bar3.url = '/images/speed'+(15-newSpeed)+'.svg';
 	bar4.url = '/images/speed'+(15-newSpeed)+'.svg';
+	var speed1 = 0;
+	var speed2 = 0;
+	var speed3 = 0;
+	var speed4 = 0;
 	switch (lane) {
 		case 1:
 			bar1.url = '/images/speed'+(15-newSpeed)+'.svg';
+			speed1 = speed;
 			break;
 		case 2:
 			bar2.url = '/images/speed'+(15-newSpeed)+'.svg';
+			speed2 = speed;
 			break;
 		case 3:
 			bar3.url = '/images/speed'+(15-newSpeed)+'.svg';
+			speed3 = speed;
 			break;
 		case 4:
 			bar4.url = '/images/speed'+(15-newSpeed)+'.svg';
+			speed4 = speed;
 			break;
 	}
 	bar.url = '/images/speed'+(15-newSpeed)+'.svg';
 
-	vol = Math.floor(vol/3*5);
-	if (newSpeed > 15)newSpeed = 15;
+	var vol1 = 0;
+	var vol2 = 0;
+	var vol3 = 0;
+	var vol4 = 0;
+
+	newVol = Math.floor(vol/3*5);
+	
 	bar1.scaledSize = new google.maps.Size(10, 0);
 	bar2.scaledSize = new google.maps.Size(10, 0);
 	bar3.scaledSize = new google.maps.Size(10, 0);
 	bar4.scaledSize = new google.maps.Size(10, 0);
 	switch (lane) {
 		case 1:
-			bar1.scaledSize = new google.maps.Size(10, vol);
+			bar1.scaledSize = new google.maps.Size(10, newVol);
+			vol1 = vol;
 			break;
 		case 2:
-			bar2.scaledSize = new google.maps.Size(10, vol);
+			bar2.scaledSize = new google.maps.Size(10, newVol);
+			vol2 = vol;
 			break;
 		case 3:
-			bar3.scaledSize = new google.maps.Size(10, vol);
+			bar3.scaledSize = new google.maps.Size(10, newVol);
+			vol3 = vol;
 			break;
 		case 4:
-			bar4.scaledSize = new google.maps.Size(10, vol);
+			bar4.scaledSize = new google.maps.Size(10, newVol);
+			vol4 = vol;
 			break;
 	}
-	bar.scaledSize = new google.maps.Size(10, vol);
+	bar.scaledSize = new google.maps.Size(10, newVol);
 
 	if (type == "human") {
-		vol = Math.floor(vol/2);
-		if (vol > 15)vol = 15;
-		bar.url = '/images/speed'+vol+'.svg';
+		newVol = Math.floor(vol/3*5);
+		if (newVol > 15)newVol = 15;
+		bar.url = '/images/speed'+newVol+'.svg';
 	}
 
 	var line = {
@@ -138,19 +155,19 @@ var makeMarker = function(locationUiD, coords, type, speed, vol) {
 	}
 	console.log(bar, bar1, bar2, bar3, bar4)
 
-	var barMarker = new google.maps.Marker({
-		position:coords,
-		icon: bar,
-		map: map,
-		//content: ""
-		zIndex: 0
-	});
-
+	if (type == "human") {
+		var barMarker = new google.maps.Marker({
+			position:coords,
+			icon: bar,
+			map: map,
+			zIndex: 0
+		});
+	}
+	
 	var bar1Marker = new google.maps.Marker({
 		position:coords,
 		icon: bar1,
 		map: map,
-		//content: ""
 		zIndex: 0
 	});
 
@@ -158,7 +175,6 @@ var makeMarker = function(locationUiD, coords, type, speed, vol) {
 		position:coords,
 		icon: bar2,
 		map: map,
-		//content: ""
 		zIndex: 0
 	});
 
@@ -166,7 +182,6 @@ var makeMarker = function(locationUiD, coords, type, speed, vol) {
 		position:coords,
 		icon: bar3,
 		map: map,
-		//content: ""
 		zIndex: 0
 	});
 
@@ -174,14 +189,23 @@ var makeMarker = function(locationUiD, coords, type, speed, vol) {
 		position:coords,
 		icon: bar4,
 		map: map,
-		//content: ""
 		zIndex: 0
 	});
+
+	var totalContent = {};
+	if (type == "human") {	
+		totalContent = '<h1>Currently being developed</h1>'
+	}
+	else {
+		totalContent = '<h1>Total number of cars: '+vol+'<br>'+
+		'Current speed: '+speed+'</h1>'
+	}
 
 	var idMarker = new google.maps.Marker({
 		position:coords,
 		icon: id,
 		map: map,
+		content: totalContent,
 		zIndex: 10
 	});
 
@@ -192,12 +216,12 @@ var makeMarker = function(locationUiD, coords, type, speed, vol) {
 		zIndex: 20
 	});
 
-	var inforWindow = new google.maps.InfoWindow({
-		content:barMarker.content
+	var infoWindow = new google.maps.InfoWindow({
+		content:idMarker.content
 	});
 
-	barMarker.addListener('click', function() {
-		inforWindow.open(map, marker);
+	idMarker.addListener('click', function() {
+		infoWindow.open(map, idMarker);
 	});
 
 	storage[locationUiD] = {
@@ -208,6 +232,8 @@ var makeMarker = function(locationUiD, coords, type, speed, vol) {
 		line: lineMarker
 	}
 
+
+
 	if (type == 'car') {
 		storage[locationID] = {
 			coords: coords,
@@ -217,7 +243,15 @@ var makeMarker = function(locationUiD, coords, type, speed, vol) {
 			bar2: bar2Marker,
 			bar3: bar3Marker,
 			bar4: bar4Marker,
-			line: lineMarker
+			line: lineMarker,
+			speed1: speed1,
+			speed2: speed2,
+			speed3: speed3,
+			speed4: speed4,
+			vol1: vol1, 
+			vol2: vol2,
+			vol3: vol3,
+			vol4: vol4,
 		}
 	}
 
@@ -247,36 +281,45 @@ var makeMarker = function(locationUiD, coords, type, speed, vol) {
 var updateMarker = function(locationUiD, speed, vol) {
 	var lane = locationUiD[locationUiD.length-1];
 	lane = parseInt(lane);
-		vol = Math.floor(vol/3*5);
 	var locationID = locationUiD.substring(0, locationUiD.length-1);
 	if (lane == 1 || lane == 2 || lane == 3 || lane == 4) {
 		var coords = storage[locationID].coords;
 		var type = storage[locationID].type;
+		var idIcon = storage[locationID].id.icon;
 	}
 	else {
 		var coords = storage[locationUiD].coords;
 		var type = storage[locationUiD].type;
+		var idIcon = storage[locationUiD].id.icon;
 	}
 	//remove marker
 	if (type == "car") {
-		storage[locationID]["bar"+lane].setMap(null);
+		
 		var bar = {};
 		switch(lane) {
 			case 1:
 				bar.origin = new google.maps.Point(0,0);
-				bar.anchor = new google.maps.Point(15,vol*2);
+				bar.anchor = new google.maps.Point(21,0);
+				storage[locationID].speed1 = speed;
+				storage[locationID].vol1 = vol;
 				break;
 			case 2:
 				bar.origin = new google.maps.Point(0,0);
-				bar.anchor = new google.maps.Point(5,vol*2);
+				bar.anchor = new google.maps.Point(11,0);
+				storage[locationID].speed2 = speed;
+				storage[locationID].vol2 = vol;
 				break;
 			case 3:
 				bar.origin = new google.maps.Point(0,0);
-				bar.anchor = new google.maps.Point(-5,vol*2);
+				bar.anchor = new google.maps.Point(1,0);
+				storage[locationID].speed3 = speed;
+				storage[locationID].vol3 = vol;
 				break;
 			case 4:
 				bar.origin = new google.maps.Point(0,0);
-				bar.anchor = new google.maps.Point(-15,vol*2);
+				bar.anchor = new google.maps.Point(-9,0);
+				storage[locationID].speed4 = speed;
+				storage[locationID].vol4 = vol;
 				break;
 		}
 
@@ -284,50 +327,97 @@ var updateMarker = function(locationUiD, speed, vol) {
 		if (newSpeed > 15)newSpeed = 15;
 		bar.url = '/images/speed'+(15-newSpeed)+'.svg';
 
-		vol = Math.floor(vol/3*5);
-		bar.scaledSize = new google.maps.Size(10, vol);
+		newVol = Math.floor(vol/3*5);
+		
+		bar.scaledSize = new google.maps.Size(10, newVol);
 
 		var barMarker = new google.maps.Marker({
 			position:coords,
 			icon: bar,
 			map: map,
-			//content: ""
 			zIndex: 0
 		});
+
+		storage[locationID]["speed"+lane] = speed;
+		storage[locationID]["vol"+lane] = vol;
+
+		var tVol = (storage[locationID].vol1 + storage[locationID].vol2+ 
+		storage[locationID].vol3 + storage[locationID].vol4)/4;
+
+		var tSpeed = (storage[locationID].speed1 + storage[locationID].speed2+ 
+		storage[locationID].speed3 + storage[locationID].speed4)/4;
+
+		var idMarker = new google.maps.Marker({
+			position:coords,
+			icon: idIcon,
+			map: map,
+			content: '<h1>Total number of cars: '+tVol+'<br>Current speed: '+tSpeed+'</h1>',
+			zIndex: 10
+		});
+
+		storage[locationID]["bar"+lane].setMap(null);
 		storage[locationID]["bar"+lane] = barMarker;
+		storage[locationID]["id"].setMap(null);
+		storage[locationID]["id"] = idMarker;
+
+		var infoWindow = new google.maps.InfoWindow({
+			content:idMarker.content
+		});
+
+		idMarker.addListener('click', function() {
+			infoWindow.open(map, idMarker);
+		});
 		return;
 	}
 
 	storage[locationUiD].bar.setMap(null);
+	storage[locationUiD].id.setMap(null);
 	//add new marker
 	var bar = {
 		origin: new google.maps.Point(0,0),
-		anchor: new google.maps.Point(5,vol*2)
+		anchor: new google.maps.Point(6,0)
 	}
 
 	var newSpeed = Math.floor(speed/4);
 	if (newSpeed > 15)newSpeed = 15;
 	bar.url = '/images/speed'+(15-newSpeed)+'.svg';
 
-	vol = Math.floor(vol/2);
-	if (vol > 15)vol = 15;
-	bar.url = '/images/speed'+vol+'.svg';
+	newVol = Math.floor(vol/3*5);
+	if (newVol > 15)newVol = 15;
+	bar.url = '/images/speed'+newVol+'.svg';
 
 	var barMarker = new google.maps.Marker({
 		position:coords,
 		icon: bar,
 		map: map,
-		//content: ""
 		zIndex: 0
 	});
 	storage[locationUiD].bar = barMarker;
+
+	var idMarker = new google.maps.Marker({
+			position:coords,
+			icon: idIcon,
+			map: map,
+			content: '<h1>Currently being developed</h1>',
+			zIndex: 10
+		});
+
+	var infoWindow = new google.maps.InfoWindow({
+		content:idMarker.content
+	});
+
+	idMarker.addListener('click', function() {
+		infoWindow.open(map, idMarker);
+	});
+
+	storage[locationUiD].id = idMarker;
 }
 
 var showCars = function(show) {
 	var carmap = null;
 	if(show)carmap = map;
 	Object.keys(storage).forEach(function(key) {
-		if (storage[key].type = 'car') {
+		if (storage[key].type == 'car') {
 			storage[key].bar.setMap(carmap);
 			storage[key].id.setMap(carmap);
 			storage[key].line.setMap(carmap);
@@ -339,12 +429,18 @@ var showHuman = function(show) {
 	var hmap = null;
 	if(show)hmap = map;
 	Object.keys(storage).forEach(function(key) {
-		if (storage[key].type = 'human') {
+		if (storage[key].type == 'human') {
 			storage[key].bar.setMap(hmap);
 			storage[key].id.setMap(hmap);
 			storage[key].line.setMap(hmap);
 		}
 	});
+}
+
+var resetSimulation = function () {
+	showCars(false);
+	showHuman(false);
+	storage = {};
 }
 
 
