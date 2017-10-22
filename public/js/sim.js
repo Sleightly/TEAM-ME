@@ -15,11 +15,14 @@ var sim = function(start, end) {
   this.events = att.getData(bbox, start, end);
   this.index = 0;
 
-  this.setTimeScale = function(scale){
-    this.timeScale = scale;
+  this.increaseScale = function(){
+    this.timeScale=this.timeScale*5;
+  }
+  this.decreaseScale = function(){
+    this.timeScale=this.timeScale/5;
   }
 
-  this.start = function(){
+  this.begin = function(){
     this.running = true;
     this.run();
   }
@@ -39,6 +42,16 @@ var sim = function(start, end) {
         break;
       }
     }
+    var time = (new Date(this.currentTime));
+    var h = String(time.getHours());
+    var m = String(time.getMinutes());
+    var s = String(time.getSeconds());
+    h = h.length==1 ? '0'+h:h;
+    m = m.length==1 ? '0'+m:m;
+    s = s.length==1 ? '0'+s:s;
+    hour.html(h);
+    min.html(m);
+    second.html(s);
     setTimeout(this.run.bind(this), this.interval/this.timeScale);
   }
 
@@ -46,10 +59,18 @@ var sim = function(start, end) {
     this.running = false;
     this.index = 0;
     this.currentTime = this.start;
-    //delete all markers
+    hour.html('00')
+    min.html('00')
+    second.html('00')
+    resetSimulation();
   }
 
 }
+
+var hour = $('#hour');
+var min = $('#min');
+var second = $('#second');
+
 
 var activeSim = null;
 
@@ -69,6 +90,12 @@ var startDemo = function(start, end){
   }else{
     activeSim = new sim(start, end);
   }
+}
+
+var endDemo = function(){
+  $('#menu').css('display', 'block');
+  $('#control').css('display', 'none');
+  activeSim.reset();
 }
 
 var demo1 = function(){

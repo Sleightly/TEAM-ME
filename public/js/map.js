@@ -156,7 +156,7 @@ var makeMarker = function(locationUiD, coords, type, speed, vol) {
 		origin: new google.maps.Point(0,0),
 		anchor: new google.maps.Point(4,8),
 	}
-	console.log(bar, bar1, bar2, bar3, bar4)
+	//console.log(bar, bar1, bar2, bar3, bar4)
 
 	if (type == "human") {
 		var barMarker = new google.maps.Marker({
@@ -227,14 +227,6 @@ var makeMarker = function(locationUiD, coords, type, speed, vol) {
 		infoWindow.open(map, idMarker);
 	});
 
-	storage[locationUiD] = {
-		coords: coords,
-		type: type,
-		id: idMarker,
-		bar: barMarker,
-		line: lineMarker
-	}
-
 
 
 	if (type == 'car') {
@@ -255,8 +247,19 @@ var makeMarker = function(locationUiD, coords, type, speed, vol) {
 			vol2: vol2,
 			vol3: vol3,
 			vol4: vol4,
+      infowin: infoWindow
 		}
-	}
+	}else{
+    
+
+    storage[locationUiD] = {
+      coords: coords,
+      type: type,
+      id: idMarker,
+      bar: barMarker,
+      line: lineMarker
+    }
+  }
 
 	/*function addMarker(props) {
 		var marker = new google.maps.Marker({
@@ -337,12 +340,13 @@ var updateMarker = function(locationUiD, speed, vol) {
 		
 		bar.scaledSize = new google.maps.Size(10, newVol);
 
-		var barMarker = new google.maps.Marker({
+		/*var barMarker = new google.maps.Marker({
 			position:coords,
 			icon: bar,
 			map: map,
 			zIndex: 0
-		});
+		});*/
+    storage[locationID]["bar"+lane].setIcon(bar);
 
 		storage[locationID]["speed"+lane] = speed;
 		storage[locationID]["vol"+lane] = vol;
@@ -353,29 +357,30 @@ var updateMarker = function(locationUiD, speed, vol) {
 		var tSpeed = Math.floor((storage[locationID].speed1 + storage[locationID].speed2+ 
 		storage[locationID].speed3 + storage[locationID].speed4)/4*10)/10;
 
-		var idMarker = new google.maps.Marker({
+		/*var idMarker = new google.maps.Marker({
 			position:coords,
 			icon: idIcon,
 			map: map,
 			content: '<h1>Total number of cars: '+tVol+'<br>Avg speed: '+tSpeed+' m/s</h1>',
 			zIndex: 10
-		});
+		});*/
+    var content = '<h1>Total number of cars: '+tVol+'<br>Avg speed: '+tSpeed+' m/s</h1>';
+    storage[locationID].infowin.setContent(content);
+		//storage[locationID]["bar"+lane].setMap(null);
+		//storage[locationID]["bar"+lane] = barMarker;
+		//storage[locationID]["id"].setMap(null);
+		//storage[locationID]["id"] = idMarker;
 
-		storage[locationID]["bar"+lane].setMap(null);
-		storage[locationID]["bar"+lane] = barMarker;
-		storage[locationID]["id"].setMap(null);
-		storage[locationID]["id"] = idMarker;
-
-		var infoWindow = new google.maps.InfoWindow({
+		/*var infoWindow = new google.maps.InfoWindow({
 			content:idMarker.content
-		});
+		});*/
 
-		idMarker.addListener('click', function() {
+		/*idMarker.addListener('click', function() {
 			infoWindow.open(map, idMarker);
-		});
+		});*/
+
 		return;
 	}
-
 	storage[locationUiD].bar.setMap(null);
 	storage[locationUiD].id.setMap(null);
 	//add new marker
@@ -424,7 +429,11 @@ var showCars = function(show) {
 	if(show)carmap = map;
 	Object.keys(storage).forEach(function(key) {
 		if (storage[key].type == 'car') {
-			storage[key].bar.setMap(carmap);
+      console.log(storage[key])
+      storage[key].bar1.setMap(carmap);
+      storage[key].bar2.setMap(carmap);
+      storage[key].bar3.setMap(carmap);
+      storage[key].bar4.setMap(carmap);
 			storage[key].id.setMap(carmap);
 			storage[key].line.setMap(carmap);
 		}

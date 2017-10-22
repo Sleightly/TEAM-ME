@@ -22,19 +22,23 @@ html
             input#startTime.demoButton.timeField(style="left:62%")
             input#duration.demoButton.timeField(style="left:81%")
         #control.menu
-            button#startButton.demoButton(style="left:2%", onclick="activeSim.start()")
+            button#startButton.demoButton(style="left:2%", onclick="activeSim.begin()")
                 |START
-            button#endButton.demoButton(style="left:17%", onclick="activeSim.reset()")
+            button#endButton.demoButton(style="left:17%", onclick="endDemo()")
                 |END
-            button#demo1Button.demoButton(style="left:32%;width:7%")
+            button#demo1Button.demoButton(style="left:32%;width:7%", onclick="activeSim.increaseScale()")
                 |+
-            button#customDemoButton.demoButton(style="left:41%;width:7%")
+            button#customDemoButton.demoButton(style="left:41%;width:7%", onclick="activeSim.decreaseScale()")
                 |-
-            #hour.timeDisplay(style="right:21%")
+            #hour.timeDisplay(style="right:36%")
                 |00
-            #colon.timeDisplay(style="right:18%;width:5%")
+            #colon.timeDisplay(style="right:34%;width:5%")
                 |:
-            #min.timeDisplay
+            #min.timeDisplay(style="right:19%")
+                |00
+            #colon.timeDisplay(style="right:17%;width:5%")
+                |:
+            #second.timeDisplay
                 |00
     != gen.keys()
     != gen.js()
