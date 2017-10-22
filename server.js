@@ -49,10 +49,12 @@ EXS.app.post('/sms', (req, res) => {
 EXS.app.get('/demoStart', (req, res) => {
   console.log('sim started')
 	simRunning = true;
+	res.end();
   setTimeout(sendMessage, 5000);
 });
 
 EXS.app.get('/demoEnd', (req, res) => {
+	res.end()
   simRunning = false;
 });
 
