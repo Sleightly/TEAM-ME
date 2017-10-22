@@ -1,4 +1,4 @@
-var sim = function(start, end) {
+var sim = function(start, end, phone) {
   if(!start || !end){
     console.log("ERROR: Bad Sim");
     return;
@@ -23,6 +23,8 @@ var sim = function(start, end) {
   }
 
   this.begin = function(){
+    if(phone)
+      console.log('starting sim')
     $.get('/demoStart', ()=>{});
     this.running = true;
     this.run();
@@ -61,6 +63,7 @@ var sim = function(start, end) {
   }
 
   this.reset = function(){
+    if(phone)
     $.get('/demoEnd', ()=>{});
     this.running = false;
     this.index = 0;
@@ -81,7 +84,7 @@ var second = $('#second');
 var activeSim = null;
 
 setTimeout(function(){
-  demosims.push(new sim(1508456827000, 1508460427000));
+  demosims.push(new sim(1508456827000, 1508460427000, true));
   console.log('simmed')
 }, 1000)
 
