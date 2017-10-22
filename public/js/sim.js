@@ -37,7 +37,10 @@ var sim = function(start, end) {
     for(; this.index< this.events.length; this.index++){
       var event = this.events[this.index];
       if(event.time<=this.currentTime+this.interval){
-        makeMarker(event.location, event.coords, 'car', event.measures.speed, event.measures.vehicleCount);
+        if(event.type=='car')
+          makeMarker(event.location, event.coords, event.type, event.measures.speed, event.measures.vehicleCount);
+        else
+          makeMarker(event.location, event.coords, event.type, event.measures.speed, event.measures.pedestrianCount);
       }else{
         break;
       }
