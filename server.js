@@ -13,16 +13,25 @@ const twiml = new MessagingResponse();
   var keyword1 = "traffic";
   var keyword2 = "pedestrian";
 
+  var msg = str.split(" ");
+  if (msg.indexOf(keyword1) != -1) {
+  	twiml.message('There is heavy traffic around 8th avenue and F street, and 8th avenue and G street. Recommend taking E Street to 9th Avenue.');
+  	res.writeHead(200, {'Content-Type': 'text/xml'});
+  	res.end(twiml.toString());
+  }
 
+  else if (msg.indexOf(keyword2) != -1) {
+  	twiml.message('Heavy pedestrian crossing along 7th avenue and 8th avenue intersecting G street.');
+  	res.writeHead(200, {'Content-Type': 'text/xml'});
+  	res.end(twiml.toString());
+  }
+  else {
+  	  twiml.message('Text keyword "traffic" or "pedestrian" for updates on local crowded intersections.');
+	  res.writeHead(200, {'Content-Type': 'text/xml'});
+	  res.end(twiml.toString());
+  }
 
-
-
-
-  twiml.message('what up');
-  console.log("text received");
-
-  res.writeHead(200, {'Content-Type': 'text/xml'});
-  res.end(twiml.toString());
+  console.log("Received text!");
 });
 
 var simRunnning = false;
