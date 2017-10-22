@@ -81,3 +81,63 @@ body {
   color: #cccccc;
   font-family: 'Orbitron', sans-serif;
 }
+
+#phone {
+  position: absolute;
+  width: 50%;
+  height: 10%;
+  top: 45%;
+  right: 0;
+}
+
+#phoneMenu {
+  position: absolute;
+  top:0;
+  right:0;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  display: none;
+}
+
+#background {
+  position: absolute;
+  height: 100%;
+  width: 12%;
+  background-color: rgba(0,0,0,.5);
+  box-shadow: 3px 10px 22px 0px rgba(0,0,0,0.75);
+  right: 0;
+  top:0;
+}
+
+#phone button {
+  position: absolute;
+  top: 10%;
+  right: 2%;
+  height: 80%;
+  width: 8%;
+  background-color: rgba(100,100,100,.5);
+  color: #cccccc;
+  border: #000000 1px solid !important;
+  margin: 0px;
+  padding: 0px;
+  z-index: 1;
+}
+
+#phone button:hover{
+  background-color: rgba(120,120,120,.5);
+}
+
+#phone input {
+  position: absolute;
+  top: 10%;
+  right: 23%;
+  height: 80%;
+  width: 75%;
+  background-color: rgba(100,100,100,.5);
+  color: #cccccc;
+  border: #000000 1px solid !important;
+  margin: 0px;
+  padding: 0px;
+  z-index: 1;
+}

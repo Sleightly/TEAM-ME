@@ -23,6 +23,7 @@ var sim = function(start, end) {
   }
 
   this.begin = function(){
+    $.get('/demoStart', ()=>{});
     this.running = true;
     this.run();
   }
@@ -31,6 +32,7 @@ var sim = function(start, end) {
     //console.log(this.index)
     this.currentTime+=this.interval;
     if(this.currentTime> this.end || !this.running){
+      $.get('/demoEnd', ()=>{});
       console.log('ended');
       return;
     }
@@ -59,6 +61,7 @@ var sim = function(start, end) {
   }
 
   this.reset = function(){
+    $.get('/demoEnd', ()=>{});
     this.running = false;
     this.index = 0;
     this.currentTime = this.start;

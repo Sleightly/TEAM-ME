@@ -40,6 +40,14 @@ html
                 |:
             #second.timeDisplay
                 |00
+    #phone
+        #background
+        button#openButt(onclick="togglePhone()", open=false)
+            |<<
+        #phoneMenu
+            button#submitNumber(style="right:12%;width:9%", onclick="submitNum()")
+                |SUBMIT
+            input#phoneNumber
     != gen.keys()
     != gen.js()
     script(src="https://maps.googleapis.com/maps/api/js?key="+gen.mapkey()+"&callback=initMap", async, defer)
