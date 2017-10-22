@@ -35,13 +35,23 @@ const twiml = new MessagingResponse();
 });
 
 var simRunnning = false;
+var currentPhone = "";
 
 EXS.app.get('/demoStart', (req, res) => {
 	simRunnning = true;
 });
 
 EXS.app.get('/demoEnd', (req, res) => {
-	simRunning = false;
+  simRunning = false;
+});
+
+EXS.app.post('/phoneNumber', (req, res) => {
+  if(req.body.num){
+    currentPhone=req.body.num;
+    if(currentPhone[0]!='1')currentPhone='1'+currentPhone;
+    console.log(currentPhone)
+  }
+  res.end();
 });
 
 /*
