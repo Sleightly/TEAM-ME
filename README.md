@@ -1,5 +1,8 @@
 # Colored Bars and Toy Cars
 
+## Winner of the AT&T Smart City API Prize at SDHACKS2017
+October 2017
+
 ## Authors
 SDHACKS 2017 Project by Matt Chan and Edward Chen
 
