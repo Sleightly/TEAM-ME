@@ -4,7 +4,7 @@
 SDHACKS 2017 Project by Matt Chan and Edward Chen
 
 ## About
-We used AT&T's smart city API to create a data visualization platform where pedestrians and drivers can be better informed of their surrounding city. We also wanted to create an automated reponse system using Twilio's API to provide live updates of traffic and pedestrian conditions. To best demonstrate this, we created a couple simulations on Google Maps with custom markers and animated graphs.
+We used AT&T's smart city API to create a data visualization platform where pedestrians and drivers can be better informed of their surrounding city. We also wanted to create an automated response system using Twilio's API to provide live updates of traffic and pedestrian conditions. To best demonstrate this, we created a couple simulations on Google Maps with custom markers and animated graphs.
 
 Some key features we have:
 - Recent live data of past and current traffic conditions
