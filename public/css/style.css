@@ -65,6 +65,7 @@ body {
 
 .timeField {
   width: 17%;
+  font-size: 30px;
 }
 
 #control {
@@ -136,6 +137,7 @@ body {
   width: 75%;
   background-color: rgba(100,100,100,.5);
   color: #cccccc;
+  font-size: 30px;
   border: #000000 1px solid !important;
   margin: 0px;
   padding: 0px;

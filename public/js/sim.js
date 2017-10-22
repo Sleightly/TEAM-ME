@@ -84,7 +84,7 @@ var second = $('#second');
 var activeSim = null;
 
 setTimeout(function(){
-  demosims.push(new sim(1508456827000, 1508460427000, true));
+  demosims.push(new sim(1508456827000, 1508460427000));
   console.log('simmed')
 }, 1000)
 
@@ -97,7 +97,7 @@ var startDemo = function(start, end){
   if(!start){
     activeSim = demosims[0];
   }else{
-    activeSim = new sim(start, end);
+    activeSim = new sim(start, end, true);
   }
 }
 
@@ -109,4 +109,10 @@ var endDemo = function(){
 
 var demo1 = function(){
   startDemo()
+}
+
+var customDemo = function(){
+  var start = parseInt($('#startTime').val());
+  var end = start+parseInt($('#duration').val());
+  startDemo(start, end);
 }
