@@ -113,8 +113,10 @@ try{
 var accountSid = config.Sid; // Your Account SID from www.twilio.com/console
 var authToken = config.authToken;   // Your Auth Token from www.twilio.com/console
 
-var twilio = require('twilio');
-var client = new twilio(accountSid, authToken);
+if(twilioenabled){
+  var twilio = require('twilio');
+  var client = new twilio(accountSid, authToken);
+}
 
 var simulationTexts = [
   "Heavy traffic on E street and 7th avenue.",
