@@ -4,9 +4,14 @@ var EXS = require('./lib/expressServer');
 
 var simRunning = false;
 var currentPhone = "";
+var twilioenabled = false;
 
 var MessagingResponse = require('twilio').twiml.MessagingResponse;
 EXS.app.post('/sms', (req, res) => {
+  if(!twilioenabled){
+    res.end();
+    return;
+  }
   const twiml = new MessagingResponse();
   console.log(simRunning);
   if (!simRunning) {
@@ -47,6 +52,10 @@ EXS.app.post('/sms', (req, res) => {
 });
 
 EXS.app.get('/demoStart', (req, res) => {
+  if(!twilioenabled){
+    res.end();
+    return;
+  }
   console.log('sim started')
 	simRunning = true;
 	res.end();
@@ -54,11 +63,19 @@ EXS.app.get('/demoStart', (req, res) => {
 });
 
 EXS.app.get('/demoEnd', (req, res) => {
+  if(!twilioenabled){
+    res.end();
+    return;
+  }
 	res.end()
   simRunning = false;
 });
 
 EXS.app.post('/phoneNumber', (req, res) => {
+  if(!twilioenabled){
+    res.end();
+    return;
+  }
   if(req.body.num){
     currentPhone=req.body.num;
     if(currentPhone[0]!='1')currentPhone='1'+currentPhone;
@@ -68,6 +85,10 @@ EXS.app.post('/phoneNumber', (req, res) => {
 });
 
 var sendMessage = function() {
+  if(!twilioenabled){
+    res.end();
+    return;
+  }
   console.log(simRunning, currentPhone)
   if(!simRunning ||currentPhone=="")return;
   var msg = simulationTexts[Math.floor(simulationTexts.length*Math.random())];
@@ -79,7 +100,15 @@ var sendMessage = function() {
   setTimeout(sendMessage, 25000)
 }
 
-var config = require('./KeyConfig');
+try{
+  var config = require('./KeyConfig');
+}catch(err){
+  var config = {};
+  config.Google = process.env.GOOGLE || "";
+  config.Map = process.env.MAP || "";
+  config.Sid = process.env.SID || "";
+  config.authToken = process.env.AUTHTOKEN || "";
+}
 
 var accountSid = config.Sid; // Your Account SID from www.twilio.com/console
 var authToken = config.authToken;   // Your Auth Token from www.twilio.com/console

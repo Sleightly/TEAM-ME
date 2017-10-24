@@ -302,6 +302,8 @@ var makeMarker = function(locationUiD, coords, type, speed, vol) {
 }
 
 var updateMarker = function(locationUiD, speed, vol) {
+  console.log(speed);
+  speed = speed==NaN ? 0 : speed;
 	var lane = locationUiD[locationUiD.length-1];
 	lane = parseInt(lane);
 	var locationID = locationUiD.substring(0, locationUiD.length-1);

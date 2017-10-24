@@ -12,7 +12,8 @@ var sim = function(start, end, phone) {
   var bounds = map.getBounds();
   this.bounds = bounds = [bounds.getNorthEast(), bounds.getSouthWest()];
   var bbox = bounds[0].lat()+':'+bounds[0].lng()+','+bounds[1].lat()+':'+bounds[1].lng();
-  this.events = att.getData(bbox, start, end);
+  this.events = [];
+  wh.startSimQuery(this, bbox, start, end);
   this.index = 0;
 
   this.increaseScale = function(){
@@ -24,8 +25,8 @@ var sim = function(start, end, phone) {
 
   this.begin = function(){
     if(phone)
-      console.log('starting sim')
-    $.get('/demoStart', ()=>{});
+      $.get('/demoStart', ()=>{});
+    console.log('starting sim')
     this.running = true;
     this.run();
   }
@@ -76,6 +77,70 @@ var sim = function(start, end, phone) {
 
 }
 
+var workerHandler = function() {
+  var taskrunning = false;
+  var att = new Worker('js/trafficData.js');
+  var holdMessage = "";
+  var box = $('#qstatus');
+  var status = $('#qstatus #message');
+  var percentage = $('#qstatus #percentage');
+  var currentSim = null;
+  this.startSimQuery = (sim, bbox, start, end) => {
+    if(!sim||!bbox||!start||!end){
+      console.log('Bad Query');
+      return;
+    }
+    if(taskrunning){
+      setHolder("A task is currently running. Please wait until it finishes execution.");
+      return;
+    }
+    currentsim = sim;
+    att.postMessage({bbox, start, end});
+    percentage.css('background-color', 'rgba(100,255,100,.5)');
+    taskrunning = true;
+    loadDots(0);
+  }
+  this.canRun = () => {
+    return !taskrunning;
+  }
+  att.onmessage = (e) => {
+    if(e.data.percentage!=undefined)percentage.html(e.data.percentage+'%');
+    else if(e.data.events){
+      currentsim.events = e.data.events;
+      if(demosims.indexOf(currentsim)==-1){
+        $('#menu').css('display', 'none');
+        $('#control').css('display', 'block');
+        $('.timeDisplay').css('font-size', $('#control').height()*.9+'px');
+      }
+      taskrunning = false;
+      status.html('Success!  Query has finished loading.');
+      currentsim = null;
+    }else if(e.error){
+      taskrunning = false;
+      status.html('Sorry, an error occured.  Please try waiting some time or contacting the developers.');
+      percentage.css('background-color', 'rgba(255,100,100,.5)');
+    }
+  }
+  function loadDots(num){
+    if(!taskrunning)return;
+    var ret = "Please wait, currently loading query from AT&T Intelligent City API";
+    for(var i = 0; i<num; i++){
+      ret+='.';
+    }
+    if(holdMessage=="")status.html(ret);
+    setTimeout(()=>{
+      loadDots((num+1)%5);
+    }, 1000);
+  }
+  this.setHolder=(msg) => {
+    holdMessage = msg;
+    status.html(holdMessage);
+    setTimeout(()=>{holdMessage=""},1000);
+  }
+}
+
+var wh = new workerHandler();
+
 var hour = $('#hour');
 var min = $('#min');
 var second = $('#second');
@@ -83,18 +148,20 @@ var second = $('#second');
 
 var activeSim = null;
 
-setTimeout(function(){
-  demosims.push(new sim(1508456827000, 1508460427000));
-  console.log('simmed')
-}, 1000)
-
 var demosims = [];
+setTimeout(()=>{
+  demosims.push(new sim(1508456827000, 1508460427000));
+},1000)
 
 var startDemo = function(start, end){
-  $('#menu').css('display', 'none');
-  $('#control').css('display', 'block');
-  $('.timeDisplay').css('font-size', $('#control').height()*.9+'px');
+  if(!wh.canRun()){
+    wh.setHolder("A task is currently running. Please wait until it finishes execution.");
+    return;
+  }
   if(!start){
+    $('#menu').css('display', 'none');
+    $('#control').css('display', 'block');
+    $('.timeDisplay').css('font-size', $('#control').height()*.9+'px');
     activeSim = demosims[0];
   }else{
     activeSim = new sim(start, end, true);

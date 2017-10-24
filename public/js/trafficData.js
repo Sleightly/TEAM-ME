@@ -2,7 +2,7 @@ var att = {};
 
 att.auth = {
   method: 'GET',
-  url: 'https://890407d7-e617-4d70-985f-01792d693387.predix-uaa.run.aws-usw02-pr.ice.predix.io/oauth/token?grant_type=client_credentials',
+  url: 'https://890407d7-e617-4d70-985f-01792d693387.predix-uaa.run.aws-usw02-pr.ice.predix.io/oauth/token',
   headers: {
     'Authorization': 'Basic aGFja2F0aG9uOkBoYWNrYXRob24='
   },
@@ -66,6 +66,16 @@ att.pedLocation = {
 att.cachedLocations = {};
 
 att.getData = function(bbox, start, end){
+  try{
+    var t = window;
+    t = true;
+  }catch(e){
+    t = false;
+  }
+  if(t){
+    console.log("Error: Don't request data in the main thread you dummy.  Please use the worker thread.");
+    return;
+  }
   //auth
   att.auth.success = function(data){
     att.traffic.headers.Authorization = data.token_type+' '+data.access_token;
@@ -73,7 +83,7 @@ att.getData = function(bbox, start, end){
     att.ped.headers.Authorization = data.token_type+' '+data.access_token;
     att.pedLocation.headers.Authorization = data.token_type+' '+data.access_token;
   }
-  $.ajax(att.auth)
+  ajax(att.auth)
   
   var trafficEvents = [];
 
@@ -100,7 +110,34 @@ att.getData = function(bbox, start, end){
       };
     })
   }
-  $.ajax(att.location);
+  ajax(att.location);
+
+  //pedlocation
+  var pedlocparams = {
+    q: 'locationType:WALKWAY',
+    bbox: bbox,
+    size: 400,
+    startTime: start,
+    endTime: end
+  }
+  att.pedLocation.data = pedlocparams;
+  var pedLocations = [];
+  att.pedLocation.success = function(data){
+    pedLocations = data.content;
+    pedLocations.forEach((location)=>{
+      var str = location.coordinates;
+      var spl = str.split(',');
+      var one = spl[0].split(':');
+      att.cachedLocations[location.locationUid] = {
+        lat: parseFloat(one[0]),
+        lng: parseFloat(one[1])
+      };
+    })
+  }
+  ajax(att.pedLocation);
+
+  var total = (locations.length+pedLocations.length)/100;
+  var counter = 0;
 
   //traffic
   var params = {
@@ -125,33 +162,11 @@ att.getData = function(bbox, start, end){
       })
       console.log(trafficEvents.length)
     }
-    $.ajax(att.traffic);
+    ajax(att.traffic);
     att.traffic.url = temp;
+    counter++;
+    postMessage({percentage: Math.floor(counter/total*10)/10});
   })
-
-  //pedlocation
-  var pedlocparams = {
-    q: 'locationType:WALKWAY',
-    bbox: bbox,
-    size: 400,
-    startTime: start,
-    endTime: end
-  }
-  att.pedLocation.data = pedlocparams;
-  var pedLocations = [];
-  att.pedLocation.success = function(data){
-    pedLocations = data.content;
-    pedLocations.forEach((location)=>{
-      var str = location.coordinates;
-      var spl = str.split(',');
-      var one = spl[0].split(':');
-      att.cachedLocations[location.locationUid] = {
-        lat: parseFloat(one[0]),
-        lng: parseFloat(one[1])
-      };
-    })
-  }
-  $.ajax(att.pedLocation);
 
   //pedestrian
   var params = {
@@ -176,11 +191,13 @@ att.getData = function(bbox, start, end){
       })
       console.log(trafficEvents.length)
     }
-    $.ajax(att.ped);
+    ajax(att.ped);
     att.ped.url = temp;
+    counter++;
+    postMessage({percentage: Math.floor(counter/total*10)/10});
   })
 
-
+  console.log('simmed')
   trafficEvents.sort(function(a,b){
     return a.time-b.time
   });
@@ -194,4 +211,28 @@ function paramsToString(params){
     ret+=key+'='+params[key];
   })
   return ret;
+}
+
+function ajax(p){
+  var url = p.url+paramsToString(p.data);
+  var xhr = new XMLHttpRequest();
+  xhr.open(p.method, url, p.async);
+  xhr.onreadystatechange = () => {
+    if(xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+      p.success(JSON.parse(xhr.responseText));
+    }else if(xhr.status === 500) {
+      p.error(JSON.parse(xhr.responseText));
+      postMessage({error: ":("});
+    }
+  }
+  Object.keys(p.headers).forEach((key)=>{
+    xhr.setRequestHeader(key, p.headers[key]);
+  });
+  xhr.send();
+}
+
+onmessage = function(e) {
+  postMessage({percentage: 0});
+  var events = att.getData(e.data.bbox, e.data.start, e.data.end);
+  postMessage({events});
 }

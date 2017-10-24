@@ -89,6 +89,7 @@ body {
   height: 10%;
   top: 45%;
   right: 0;
+  pointer-events: none;
 }
 
 #phoneMenu {
@@ -99,6 +100,7 @@ body {
   width: 100%;
   margin: 0;
   display: none;
+  pointer-events: all;
 }
 
 #background {
@@ -109,6 +111,7 @@ body {
   box-shadow: 3px 10px 22px 0px rgba(0,0,0,0.75);
   right: 0;
   top:0;
+  pointer-events: all;
 }
 
 #phone button {
@@ -123,6 +126,7 @@ body {
   margin: 0px;
   padding: 0px;
   z-index: 1;
+  pointer-events: all;
 }
 
 #phone button:hover{
@@ -142,4 +146,41 @@ body {
   margin: 0px;
   padding: 0px;
   z-index: 1;
+  pointer-events: all;
+}
+
+#qstatus {
+  position: absolute;
+  bottom: 2%;
+  height: 36px;
+  width: 60%;
+  left: 20%;
+  background-color: rgba(0,0,0,.5);
+  box-shadow: 3px 10px 22px 0px rgba(0,0,0,0.75);
+  font-size: 12px;
+}
+
+#message {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  padding: 6px;
+  width: 80%;
+  height: 12px;
+  background-color: rgba(100,100,100,.5);
+  color: #cccccc;
+  border: #000000 1px solid !important;
+}
+
+#percentage {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  padding: 6px;
+  width: 40px;
+  height: 12px;
+  background-color: rgba(100,255,100,.5);
+  color: #cccccc;
+  border: #000000 1px solid !important;
+  text-align: right;
 }
