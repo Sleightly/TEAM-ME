@@ -1,0 +1,84 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    meta(name='author', content='meme')
+    title TEAM MEME
+    link(href='css/style.css', rel='stylesheet')
+    link(href="https://fonts.googleapis.com/css?family=Ubuntu", rel="stylesheet")
+    style.
+        button{
+            background-color: #888888;
+            margin: 0;
+            border: 0;
+            padding: 10px 20px;
+            color: #dddddd;
+            font-family: 'Ubuntu';
+            font-weight: bold;
+            font-size: 1em;
+            height: auto;
+            width: auto;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 5%;
+        }
+        button:hover{
+            background-color: #555555;
+        }
+        li{
+            list-style-type: circle;
+        }
+  body(onload="$('#main').animate({'opacity':1},2000)")
+    script(src="/js/jquery.min.js")
+    #main(style="margin:0 20%;height:100%;color:#888888;text-align:center;font-family: 'Ubuntu', sans-serif;opacity:0;user-select:none")
+        h1(style="width:100%;margin-top:20%;color:#dddddd")
+            |Colored Bars and Toy Cars
+        h3(style="width:100%;margin-top:2%")
+            |Made by Edward Chen and Matthew Chan for SD Hacks 2017
+        #info(style="height:auto;width:100%")
+            p(style="width:100%;margin-top:5%")
+                |We used AT&T's Intelligent Cities API to create a data visualization platform where pedestrians and drivers can be better informed of their surrounding city. We also wanted to create an automated response system using Twilio's API to provide live updates of traffic and pedestrian conditions. To best demonstrate this, we created a couple simulations on Google Maps with custom markers and animated graphs.
+            p(style="width:100%;margin-top:5%")
+                |We thought a simulation of AT&T's Intelligent Cities data would best illustrate the traffic and pedestrian flucuations over a period of time. We hope this simulation can demonstrate many potential uses of AT&T's Intelligent Cities once implemented across cities. 
+            p(style="width:100%;margin-top:5%")
+                |Each bar on underneath a car or a pedestrian symbol represents the current speed (green - fast, red - slow) and total number of entities (length of the bar). Under each car, there are 4 bars, each representing a lane of traffic.
+        #instr(style="height:auto;width:100%;display:none")
+            p(style="width:80%;margin:0% 15%;margin-top:5%;text-align:left")
+                |Instructions:<br>During Simulation:
+            ul(style="margin:0% 20%;text-align:left")
+                li
+                    |Each car and pedestrian icon can be clicked on to display the current empirical values at that location
+                li
+                    |The + and - buttons can be used to change the run speed of the simulation
+            p(style="width:80%;margin:0% 15%;text-align:left")
+                |Demo 1:
+            ul(style="margin:0% 20%;text-align:left")
+                li
+                    |First wait for the queries to finish loading
+                li
+                    |Press Demo 1, 2, or 3 to start simulation of previously queried data
+                li
+                    |Press Start to start simulation
+                li
+                        |Press End when the timer stops
+            p(style="width:80%;margin:0% 15%;text-align:left")
+                |Custom:
+            ul(style="margin:0% 20%;text-align:left")
+                li
+                    |Input the epoch time of when you want to survey the data in the open box next to custom, ie: 1508810876161
+                li
+                    |Input the duration of how long you want survey the data, ie 1800000 is 30 minutes
+                li
+                    |Wait for the application to query all data points
+                li
+                    |Press Start to start simulation
+                li
+                    |Press End when the timer stops
+        #move(style="width:100%;height:auto;")
+            button#use(onclick="$('#info').css('display','none');$('#instr').css('display','block');$('#use').css('display','none');$('#back').css('display','inline-block')")
+                |How To Use
+            button#back(style="display:none", onclick="$('#info').css('display','block');$('#instr').css('display','none');$('#use').css('display','inline-block');$('#back').css('display','none')")
+                |Back To Introduction
+        button(onclick="$('#main').animate({'opacity':0},500);setTimeout(()=>{window.location='/app'},500)")
+            |Go To App
