@@ -215,20 +215,23 @@ function paramsToString(params){
 
 function ajax(p){
   var url = p.url+paramsToString(p.data);
+  var options = {
+    url: url,
+    method: p.method,
+    headers: p.headers
+  }
   var xhr = new XMLHttpRequest();
-  xhr.open(p.method, url, p.async);
+  xhr.open('POST', '/data', p.async);
   xhr.onreadystatechange = () => {
     if(xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
       p.success(JSON.parse(xhr.responseText));
-    }else if(xhr.status === 500) {
+    }else if(xhr.status !== 200) {
       p.error(JSON.parse(xhr.responseText));
       postMessage({error: ":("});
     }
   }
-  Object.keys(p.headers).forEach((key)=>{
-    xhr.setRequestHeader(key, p.headers[key]);
-  });
-  xhr.send();
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.send(JSON.stringify(options));
 }
 
 onmessage = function(e) {

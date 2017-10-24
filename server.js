@@ -1,10 +1,13 @@
-var EXS = require('./lib/expressServer');
+var EXS = require('./lib/expressServer'),
+    COF = require('./lib/crossOriginFix');
     //ATT = require('./lib/attData');
 
 
 var simRunning = false;
 var currentPhone = "";
 var twilioenabled = false;
+
+COF.install(EXS.app);
 
 var MessagingResponse = require('twilio').twiml.MessagingResponse;
 EXS.app.post('/sms', (req, res) => {

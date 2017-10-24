@@ -1,8 +1,8 @@
 var map = null;
 function initMap() {
 	var options = {
-		zoom:16,
-		center: {lat:32.7157, lng:-117.1611},
+		zoom:17,
+		center: {lat:32.713634, lng:-117.157457},
 		styles:styles
 	}
 	map = new google.maps.Map(document.getElementById('map'), options);
@@ -302,7 +302,7 @@ var makeMarker = function(locationUiD, coords, type, speed, vol) {
 }
 
 var updateMarker = function(locationUiD, speed, vol) {
-  console.log(speed);
+  //console.log(speed);
   speed = speed==NaN ? 0 : speed;
 	var lane = locationUiD[locationUiD.length-1];
 	lane = parseInt(lane);
@@ -456,7 +456,7 @@ var showCars = function(show) {
 	if(show)carmap = map;
 	Object.keys(storage).forEach(function(key) {
 		if (storage[key].type == 'car') {
-      console.log(storage[key])
+      //console.log(storage[key])
       storage[key].bar1.setMap(carmap);
       storage[key].bar2.setMap(carmap);
       storage[key].bar3.setMap(carmap);
